@@ -1,0 +1,39 @@
+@import
+
+// Variables
+'variables/typography',
+'variables/media',
+'variables/decor',
+
+// Mixins
+'mixins/font-face',
+'mixins/media',
+'mixins/other',
+'mixins/reset',
+'mixins/center',
+'mixins/pseudo',
+'mixins/js',
+
+// Normalize + fonts
+'../../node_modules/normalize.css/normalize',
+'fonts',
+
+// Permanents + default blocks
+'blocks/global/permanent',
+'blocks/global/visually-hidden',
+'blocks/global/clearfix',
+'blocks/global/container',
+'blocks/global/wrapper',
+
+// Blocks
+  /* global */
+'blocks/button',
+'blocks/title',
+'blocks/header',
+'blocks/footer',
+
+  /* main */
+'blocks/nav',
+'blocks/main';
+
+

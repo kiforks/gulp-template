@@ -1,208 +1,261 @@
-var gulp = require("gulp"),
-    postcss = require("gulp-postcss"),
-    posthtml = require("gulp-posthtml"),
-    autoprefixer = require("autoprefixer"),
-    htmlmin = require('gulp-htmlmin'),
-    htmlValidator = require('gulp-w3c-html-validator'),
-    plumber = require("gulp-plumber"),
-    sass = require("gulp-sass"),
-    include = require('posthtml-include'),
-    minify = require("gulp-csso"),
-    rename = require("gulp-rename"),
-    tiny = require('gulp-tinypng-nokey'),
-    webp = require('gulp-webp'),
-    imagemin = require("gulp-imagemin"),
-    svgstore = require('gulp-svgstore'),
-    del = require('del'),
-    browserSync = require('browser-sync').create(),
-    gulpStylelint = require('gulp-stylelint'),
-    concat = require('gulp-concat'),
-    terser = require('gulp-terser'),
-    gulpPngquant = require('gulp-pngquant');
-
-// SCSS/CSS
-gulp.task("style", async function () {
-    gulp.src("src/sass/style.scss")
-        .pipe(plumber())
-        .pipe(gulpStylelint({
-            failAfterError: false,
-            reporters: [
-                {
-                    formatter: 'string',
-                    console: true
-                }
-            ]
-        }))
-        .pipe(sass())
-        .pipe(postcss([
-            autoprefixer()
-        ]))
-        .pipe(gulp.dest("build/css"))
-        .pipe(minify())
-        .pipe(rename("style.min.css"))
-        .pipe(gulp.dest("build/css"))
-        .pipe(browserSync.stream());
-});
+// Path
+const buildFolder = 'build';
+const sourceFolder = 'src';
+const path = {
+        build: {
+            html: buildFolder + '/',
+            css: buildFolder + '/css/',
+            js: buildFolder + '/js/',
+            img: buildFolder + '/img/',
+            fonts: buildFolder + '/fonts/',
+            svg: buildFolder+ '/img/**/sprite.svg',
+            retina: [buildFolder + '/img/@1x/', buildFolder + '/img/@2x/', buildFolder + '/img/@3x/']
+        },
+        src: {
+            html: [sourceFolder + '/*.html', '!' + sourceFolder + '/_*.html'],
+            css: sourceFolder + '/scss/style.scss',
+            js: [sourceFolder + '/js/**/*.js', '!' + sourceFolder + '/js/templates/**/*'],
+            img: [sourceFolder + '/img/**/*.{jpg,svg,png,gif,ico,webp}', '!' + sourceFolder + '/img/**/icon-*.svg'],
+            fonts: sourceFolder + '/fonts/**/*.ttf',
+            otf: sourceFolder + '/fonts/**/*.otf',
+            retina: sourceFolder + '/img/main/**/*{jpg,png}'
+        },
+        watch: {
+            html: sourceFolder + '/**/*.html',
+            css: sourceFolder + '/scss/**/*.scss',
+            js: sourceFolder + '/js/**/*.js',
+            img: sourceFolder + '/img/**/*.{jpg,svg,png,gif,ico,webp}',
+            fonts: sourceFolder + '/fonts/**/*.ttf',
+            otf: sourceFolder + '/fonts/**/*.otf',
+            svg: sourceFolder + '/img/**/icon-*.svg'
+        },
+        clean: './' + buildFolder + '/'
+    };
 
 
-// Images
-gulp.task("imagemin", function () {
-    return gulp.src("src/img/**/*.{jpg,svg}")
-      .pipe(imagemin([
-          imagemin.gifsicle({interlaced: true}),
-          imagemin.mozjpeg({progressive: true}),
-          imagemin.svgo()
-      ]))
-
-      .pipe(gulp.dest("src/img"));
-});
-
-gulp.task('pngquant', async function() {
-  gulp.src('src/img/**/*.png')
-    .pipe(gulpPngquant({
-      quality: '65-80'
-    }))
-    .pipe(gulp.dest('src/img'));
-});
-
-gulp.task('imgx1', async function () {
-    gulp.src('src/img/_src/**/*@1x.{png,jpg,webp}')
-        .pipe(gulp.dest('src/img/@1x/'));
-});
-
-gulp.task('imgx2', async function () {
-    gulp.src('src/img/_src/**/*@2x.{png,jpg,webp}')
-        .pipe(gulp.dest('src/img/@2x/'));
-});
-
-gulp.task('imgx3', async function () {
-  gulp.src('src/img/_src/**/*@3x.{png,jpg,webp}')
-    .pipe(gulp.dest('src/img/@3x/'));
-});
-
-gulp.task("clean-images", function () {
-    return del("src/img/@*");
-});
-
-gulp.task('webp', () =>
-    gulp.src('src/img/**/*.{png,jpg}')
-        .pipe(webp())
-        .pipe(gulp.dest('src/img'))
-);
-
-gulp.task("sprite", function () {
-    return gulp.src("src/img/svg/**/icon-*.svg")
-        .pipe(svgstore({
-            inlineSvg: true
-        }))
-        .pipe(rename("sprite.svg"))
-        .pipe(gulp.dest("build/img/svg/"));
-});
-
-gulp.task("copy-images-build", function () {
-    return gulp.src("src/img/@*/**/*",
-      {   base: "src"})
-      .pipe(gulp.dest("build/"));
-});
-
-gulp.task("clean-images-build", function () {
-    return del("build/img/@*");
-});
-
-gulp.task("copy-svg", function () {
-    return gulp.src(
-        ["src/img/svg/**/*",
-            "!src/img/svg/**/icon-*.svg"], {
-            base: "src"
-        })
-        .pipe(gulp.dest("build/"));
-});
-
-gulp.task("clean-svg", function () {
-    return del("build/img/svg/**/*");
-});
-
-gulp.task("sort-images", gulp.series("clean-images","webp","imgx1","imgx2"));
-gulp.task("build-images", gulp.series("clean-images-build", "copy-images-build"));
-gulp.task("build-svg", gulp.series("clean-svg", "sprite", "copy-svg"));
-gulp.task("image-compress", gulp.parallel("imagemin","pngquant"));
-gulp.task("images", gulp.series("clean-images","webp","imgx1","imgx2","sprite","image-compress"));
-
-
-// HTML
-gulp.task("html", function () {
-    return gulp.src("src/*.html")
-        .pipe(plumber())
-        .pipe(posthtml([
-            include()
-        ]))
-        .pipe(htmlmin({ collapseWhitespace: true }))
-        .pipe(gulp.dest("build"))
-        .pipe(browserSync.stream());
-});
-
-gulp.task("validate-html", function () {
-    return gulp.src("src/*.html")
-        .pipe(htmlValidator())
-        .pipe(htmlValidator.reporter());
-});
-
-gulp.task("validate", gulp.series("html", "validate-html"));
+// Plugins
+const { src, dest } = require('gulp'),
+        browserSync = require('browser-sync').create(),
+        imageminPngquant = require('imagemin-pngquant'),
+        fonter = require('gulp-fonter'),
+        gulp = require('gulp'),
+        del = require('del'),
+        posthtml = require('gulp-posthtml'),
+        htmlValidator = require('gulp-w3c-html-validator'),
+        include = require('posthtml-include'),
+        scss = require('gulp-sass'),
+        autoprefixer = require('gulp-autoprefixer'),
+        groupMedia = require('gulp-group-css-media-queries'),
+        csso = require('gulp-csso'),
+        rename = require('gulp-rename'),
+        plumber = require('gulp-plumber'),
+        eslint = require('gulp-eslint'),
+        babel = require('gulp-babel'),
+        terser = require('gulp-terser'),
+        concat = require('gulp-concat'),
+        bemValidator = require('gulp-html-bem-validator'),
+        gulpStylelint = require('gulp-stylelint'),
+        imagemin = require('gulp-imagemin'),
+        webp = require('gulp-webp'),
+        svgstore = require('gulp-svgstore'),
+        htmlmin = require('gulp-htmlmin'),
+        ttf2woff = require('gulp-ttf2woff'),
+        ttf2woff2 = require('gulp-ttf2woff2'),
+        imageResize = require('gulp-image-resize');
 
 
 // Server
-gulp.task("serve", () => {
+function serve() {
     browserSync.init({
-        port: 4000,
-        server: "build",
-        notify: true
-    });
-    gulp.watch("src/sass/**/*.scss", gulp.parallel('style'));
-    gulp.watch("src/*.html", gulp.parallel('html')).on("change", browserSync.reload);
-    gulp.watch("src/js/**/*.js", gulp.parallel('js')).on("change", browserSync.reload);
-    gulp.watch("src/img/_src/**/*.{png,jpg}", gulp.parallel('sort-images')).on("change", browserSync.reload);
-    gulp.watch("src/img/**/*.{png,jpg}", gulp.parallel("build-images")).on("change", browserSync.reload);
-    gulp.watch("src/img/svg/**/*.svg", gulp.series('build-svg')).on("change", browserSync.reload);
-});
+        server: {
+            baseDir: './' + buildFolder + '/'
+        },
+        port: 3000,
+        notify: false
+    })
+}
+
+
+// HTML
+function html() {
+    return src(path.src.html)
+      .pipe(plumber())
+      .pipe(posthtml([
+          include()
+      ]))
+      .pipe(htmlValidator())
+      .pipe(bemValidator())
+      .pipe(htmlmin({
+        collapseWhitespace: true
+      }))
+      .pipe(dest(path.build.html))
+      .pipe(browserSync.stream())
+}
+
+
+// CSS
+function css() {
+    return src(path.src.css)
+      .pipe(plumber())
+      .pipe(gulpStylelint({
+          failAfterError: false,
+          reporters: [
+              {
+                  formatter: 'string',
+                  console: true
+              }
+          ]
+      }))
+      .pipe(scss({
+          outputStyle: 'expanded'
+      }))
+      .pipe(groupMedia())
+      .pipe(autoprefixer('last 5 versions'))
+      .pipe(dest(path.build.css))
+      .pipe(csso())
+      .pipe(rename({
+          extname: '.min.css'
+      }))
+      .pipe(dest(path.build.css))
+      .pipe(browserSync.stream())
+}
 
 
 // JS
-gulp.task('js', function() {
-    return gulp.src('src/**/*.js')
-        .pipe(terser())
-        .pipe(concat('index.js'))
-        .pipe(gulp.dest('build/js'))
-        .pipe(browserSync.stream());
-});
+function js() {
+    return src(path.src.js)
+      .pipe(plumber())
+      .pipe(eslint())
+      .pipe(eslint.format())
+      .pipe(babel({
+          presets: ['@babel/env']
+      }))
+      .pipe(concat('script.js'))
+      .pipe(terser())
+      .pipe(dest(path.build.js))
+      .pipe(browserSync.stream())
+}
 
 
-// COPY/DEL
-gulp.task("copy", function () {
-    return gulp.src([
-        "src/fonts/**/*.{woff,woff2}",
-        "src/img/@*/**/*",
-        "src/img/svg/**/*",
-        "!src/img/svg/**/icon-*.svg"], {
-        base: "src"
-    })
-        .pipe(gulp.dest("build"));
-});
+// Images
+function images() {
+  return src(path.build.img + '**/*.{jpg,svg,png,gif,ico}')
+    .pipe(imagemin([
+      imageminPngquant(),
+      imagemin.mozjpeg({
+        quality: 75, progressive: true
+      }),
+      imagemin.svgo({
+        plugins: [{
+          removeViewBox: false
+        },
+          {
+            cleanupIDs: false
+          }]
+      })
+    ],{
+      verbose: true
+    }))
+    .pipe(dest(path.build.img))
+}
+
+  /* Resize to retina + sorting images */
+function retinaImages() {
+  for(let i = 1; i < 2; i++) { // If you don’t need retina images x3 set the value 'i < 3' to 'i < 2' or vice versa
+    return src(path.src.retina)
+      .pipe(imageResize({
+        width: `${i + 1}00%`
+      }))
+      .pipe(rename({
+        suffix: `@${i + 1}x`
+      }))
+      .pipe(dest(path.build.retina[i]))
+  }
+}
+
+function imageSorting () {
+    return src(path.build.img + '**/*.{jpg,png}')
+      .pipe(plumber())
+      .pipe(webp({
+        quality: 70
+      }))
+      .pipe(dest(path.build.img))
+      .pipe(src(sourceFolder + '/img/**/icon-*.svg')
+      .pipe(svgstore({
+        inlineSvg: true
+      }))
+      .pipe(rename('sprite.svg'))
+      .pipe(dest(path.build.img)))
+      .pipe(src(path.src.img))
+      .pipe(dest(path.build.img))
+}
 
 
-gulp.task("clean", function () {
-    return del("build");
-});
+// Fonts
+  /* TTF to WOFF/WOFF2 */
+function woffConversion() {
+  return src(path.src.fonts)
+    .pipe(ttf2woff2())
+    .pipe(dest(path.build.fonts))
+    .pipe(src(path.src.fonts))
+    .pipe(ttf2woff())
+    .pipe(dest(path.build.fonts))
+}
 
-gulp.task("git-clean", function () {
-  return del("src/**/.gitkeep");
-});
+  /* OTF to TTF*/
+function ttfConversion() {
+  return src(path.src.otf)
+    .pipe(fonter({
+      formats: ['ttf']
+    }))
+    .pipe(dest(sourceFolder + '/fonts/'))
+    .pipe(src(path.src.fonts))
+}
 
+
+// Watch
+function watchFiles() {
+    gulp.watch([path.watch.html], html);
+    gulp.watch([path.watch.css], css);
+    gulp.watch([path.watch.js], js);
+    gulp.watch([path.watch.img], imageBuild);
+    gulp.watch([path.watch.fonts], woffConversion);
+    gulp.watch([path.watch.otf], ttfConversion);
+}
+
+
+// Clean
+function clean() {
+    return del(path.clean);
+}
+
+function cleanGit() {
+    return del(sourceFolder + '/**/*.gitkeep');
+}
 
 
 // Build
-gulp.task("build", gulp.series("clean","copy","sprite", "style", "js", "html"));
+const fonts = gulp.series(ttfConversion, woffConversion);
+const imageBuild = gulp.series(retinaImages, imageSorting, images); // if you don't need retina images just delete task 'retinaImages' from here
+const build = gulp.series(clean, gulp.series(imageBuild, css, html, js, fonts));
+const watch = gulp.parallel(watchFiles, serve);
 
 
 
-
+//Exports
+exports.woffConversion = woffConversion;
+exports.ttfConversion = ttfConversion;
+exports.imageSorting = imageSorting;
+exports.retinaImages = retinaImages;
+exports.cleanGit = cleanGit;
+exports.clean = clean;
+exports.css = css;
+exports.images = images;
+exports.js = js;
+exports.build = build;
+exports.fonts = fonts;
+exports.default = watch;
+exports.html = build;
+exports.watch = watch;
+exports.imageBuild = imageBuild;
 

@@ -1,7 +1,7 @@
 build
 gulpfiles.js
-
 /gulp
 /src/local_modules
-
-src/sass/style.scss
+gulpfile.js
+src/js/polyfills/**/*
+src/js/templates/**/*

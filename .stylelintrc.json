@@ -8,13 +8,21 @@
     "stylelint-config-htmlacademy"
   ],
   "rules": {
-    "indentation": 2,
+    "indentation": [2,{
+      "ignore": ["param"]
+    }],
     "at-rule-no-vendor-prefix": true,
-    "at-rule-empty-line-before": "always",
+    "at-rule-empty-line-before": "never",
+    "rule-empty-line-before": ["always",{
+      "except": ["inside-block"]
+    }],
+    "string-quotes": "single",
+    "declaration-empty-line-before": "never",
     "scss/selector-no-redundant-nesting-selector": true,
     "scss/at-import-partial-extension": "never",
     "block-closing-brace-newline-before": "always",
     "block-closing-brace-newline-after": "always",
+    "block-opening-brace-space-before": "always-single-line",
     "at-rule-name-case": "lower",
     "at-rule-name-space-after": "always",
     "at-rule-semicolon-newline-after": "always",
@@ -29,7 +37,11 @@
       "vm",
       "vmax",
       "vmin",
-      "vw"
+      "vw",
+      "deg",
+      "s",
+      "dpi",
+      "dppx"
     ]
   }
 }

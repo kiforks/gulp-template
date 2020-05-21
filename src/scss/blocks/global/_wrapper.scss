@@ -1,0 +1,17 @@
+.wrapper{
+  @include padding-mobile;
+}
+
+//Tablet
+@include tablet{
+  .wrapper{
+    @include padding-tablet;
+  }
+}
+
+//Desktop
+@include desktop{
+  .wrapper{
+    @include padding-desktop;
+  }
+}

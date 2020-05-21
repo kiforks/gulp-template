@@ -1,1 +1,7 @@
-src/sass/style.scss
+src/scss/style.scss
+src/scss/common/global/_visually-hidden.scss
+src/scss/fonts.scss
+src/scss/_mobile-first-template.scss
+src/scss/mixins/**/*
+*.css
+

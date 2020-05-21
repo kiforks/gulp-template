@@ -1,0 +1,36 @@
+@mixin retina {
+  @media (min-resolution: $retina-dpi), (min-resolution: $retina-dppx) {
+    @content;
+  }
+}
+
+@mixin mobile {
+  @media (min-width: $mobile-width) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media (min-width: $tablet-width) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media (min-width: $desktop-width) {
+    @content;
+  }
+}
+
+@mixin min-max-mobile {
+  @media (min-width: $mobile-width) and (max-width: $mobile-max-width) {
+    @content;
+  }
+}
+
+@mixin min-max-tablet {
+  @media (min-width: $tablet-width) and (max-width: $tablet-max-width) {
+    @content;
+  }
+}
+

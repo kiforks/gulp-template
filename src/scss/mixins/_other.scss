@@ -1,0 +1,67 @@
+@mixin padding-vertical($padding-top: 0, $padding-bottom: 0) {
+  padding-top: $padding-top;
+  padding-bottom: $padding-bottom;
+}
+
+@mixin padding-horizontal($padding-right: 0, $padding-left: 0) {
+  padding-right: $padding-right;
+  padding-left: $padding-left;
+}
+
+@mixin margin-vertical($margin-top: 0, $margin-bottom: 0) {
+  margin-top: $margin-top;
+  margin-bottom: $margin-bottom;
+}
+
+@mixin margin-horizontal($margin-right: 0, $margin-left: 0) {
+  margin-right: $margin-right;
+  margin-left: $margin-left;
+}
+
+@mixin margin-negative-mobile {
+  margin-right: -$mobile-padding;
+  margin-left: -$mobile-padding;
+  padding-right: $mobile-padding;
+  padding-left: $mobile-padding;
+}
+
+@mixin margin-negative-tablet {
+  margin-right: -$tablet-padding;
+  margin-left: -$tablet-padding;
+  padding-right: $tablet-padding;
+  padding-left: $tablet-padding;
+}
+
+@mixin padding-mobile {
+  padding-right: $mobile-padding;
+  padding-left: $mobile-padding;
+}
+
+@mixin padding-tablet {
+  padding-right: $tablet-padding;
+  padding-left: $tablet-padding;
+}
+
+@mixin padding-desktop {
+  padding-right: $desktop-padding;
+  padding-left: $desktop-padding;
+}
+
+@mixin flex {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+@mixin flex-row {
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+@mixin flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+@mixin line-height-auto  {
+  line-height: 120%;
+}
