@@ -5,3 +5,4 @@ gulpfiles.js
 gulpfile.js
 src/js/polyfills/**/*
 src/js/templates/**/*
+src/js/**/*

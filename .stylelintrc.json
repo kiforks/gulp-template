@@ -14,20 +14,19 @@
     "at-rule-no-vendor-prefix": true,
     "at-rule-empty-line-before": "never",
     "rule-empty-line-before": ["always",{
-      "except": ["inside-block"]
+      "except": ["first-nested"]
     }],
     "string-quotes": "single",
+    "no-descending-specificity": true,
     "declaration-empty-line-before": "never",
-    "scss/selector-no-redundant-nesting-selector": true,
-    "scss/at-import-partial-extension": "never",
+    "no-descending-specificity": false,
     "block-closing-brace-newline-before": "always",
     "block-closing-brace-newline-after": "always",
-    "block-opening-brace-space-before": "always-single-line",
     "at-rule-name-case": "lower",
     "at-rule-name-space-after": "always",
     "at-rule-semicolon-newline-after": "always",
     "at-rule-semicolon-space-before": "never",
-    "selector-max-class": 2,
+    "selector-max-class": 4,
     "unit-whitelist": [
       "em",
       "rem",
