@@ -9,9 +9,25 @@
   }
 }
 
+@mixin hover-opacity {
+  & {
+    outline: none;
+  }
+  &:hover,
+  &:focus {
+    opacity: $hover-opacity;
+  }
+}
+
 @mixin active{
-  &:active{
+  &:active {
     @content;
+  }
+}
+
+@mixin active-opacity {
+  &:active {
+    opacity: $down-opacity;
   }
 }
 
@@ -84,23 +100,23 @@
 
 @mixin placeholder-focus{
   &:focus::-webkit-input-placeholder {
-    opacity: 0;
-    -webkit-transition: opacity 0.35s ease-in-out;
-    transition: opacity 0.35s ease-in-out;
+    text-indent: 1000px;
+    -webkit-transition: text-indent 0.3s ease-in-out;
+    transition: text-indent 0.3s ease-in-out;
   }
   &:focus:-moz-placeholder {
-    opacity: 0;
-    -moz-transition: opacity 0.35s ease-in-out;
-    transition: opacity 0.35s ease-in-out;
+    text-indent: 1000px;
+    -moz-transition: text-indent 0.3s ease-in-out;
+    transition: text-indent 0.3s ease-in-out;
   }
   &:focus::-moz-placeholder {
-    opacity: 0;
-    -moz-transition: opacity 0.35s ease-in-out;
-    transition: opacity 0.35s ease-in-out;
+    text-indent: 1000px;
+    -moz-transition: text-indent 0.3s ease-in-out;
+    transition: text-indent 0.3s ease-in-out;
   }
   &:focus:-ms-input-placeholder {
-    opacity: 0;
-    -ms-transition: opacity 0.35s ease-in-out;
-    transition: opacity 0.35s ease-in-out;
+    text-indent: 1000px;
+    -ms-transition: text-indent 0.3s ease-in-out;
+    transition: text-indent 0.3s ease-in-out;
   }
 }

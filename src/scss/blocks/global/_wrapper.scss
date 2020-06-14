@@ -1,17 +1,19 @@
-.wrapper{
+.wrapper {
   @include padding-mobile;
 }
 
 //Tablet
-@include tablet{
-  .wrapper{
-    @include padding-tablet;
+@include tablet {
+  .wrapper {
+    padding: 0;
+    width: 768px;
+    margin: 0 auto;
   }
 }
 
 //Desktop
-@include desktop{
-  .wrapper{
-    @include padding-desktop;
+@include desktop {
+  .wrapper {
+    width: 1224px;
   }
 }
