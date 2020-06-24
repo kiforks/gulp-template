@@ -1,21 +1,41 @@
-@mixin padding-vertical($padding-top: 0, $padding-bottom: 0) {
+@mixin padding-vertical($padding-top, $padding-bottom: false) {
   padding-top: $padding-top;
-  padding-bottom: $padding-bottom;
+
+  @if $padding-bottom {
+    padding-bottom: $padding-bottom;
+  } @else {
+    padding-bottom: $padding-top;
+  }
 }
 
-@mixin padding-horizontal($padding-right: 0, $padding-left: 0) {
+@mixin padding-horizon($padding-right, $padding-left: false) {
   padding-right: $padding-right;
-  padding-left: $padding-left;
+
+  @if $padding-left {
+    padding-left: $padding-left;
+  } @else {
+    padding-left: $padding-right;
+  }
 }
 
-@mixin margin-vertical($margin-top: 0, $margin-bottom: 0) {
+@mixin margin-vertical($margin-top, $margin-bottom: false) {
   margin-top: $margin-top;
-  margin-bottom: $margin-bottom;
+
+  @if $margin-bottom {
+    margin-bottom: $margin-bottom;
+  } @else {
+    margin-bottom: $margin-top;
+  }
 }
 
-@mixin margin-horizontal($margin-right: 0, $margin-left: 0) {
+@mixin margin-horizon($margin-right, $margin-left: false) {
   margin-right: $margin-right;
-  margin-left: $margin-left;
+
+  @if $margin-left {
+    margin-left: $margin-left;
+  } @else {
+    margin-left: $margin-right;
+  }
 }
 
 @mixin margin-negative-mobile {
@@ -60,8 +80,4 @@
 @mixin flex-column {
   display: flex;
   flex-direction: column;
-}
-
-@mixin line-height-auto  {
-  line-height: 120%;
 }

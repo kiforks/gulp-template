@@ -4,14 +4,16 @@
   }
 }
 
+
+// For mobile-first change mobile or tablet max-width variable to normal width
 @mixin mobile {
-  @media (min-width: $mobile-width) {
+  @media (max-width: $mobile-max-width) {
     @content;
   }
 }
 
 @mixin tablet {
-  @media (min-width: $tablet-width) {
+  @media (max-width: $tablet-max-width) {
     @content;
   }
 }
@@ -33,4 +35,5 @@
     @content;
   }
 }
+
 

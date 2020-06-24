@@ -2,36 +2,38 @@
 
 function selectorToggle(selector, button, accessibility = false, focus = false) {
   const acc = () => accessibility ? visuallyHidden : closedSelector;
-
-  let toggleSelector = document.querySelectorAll('.' + selector),
-      toggleButton = document.querySelectorAll('.' + button),
-      closedSelector = selector + '--closed',
-      visuallyHidden = 'visually-hidden',
-      hidingClass = acc(),
-      focusOpenClass = selector + '--opened';
+  const toggleSelector = document.querySelectorAll('.' + selector);
+  const toggleButton = document.querySelectorAll('.' + button);
+  const closedSelector = selector + '--closed';
+  const visuallyHidden = 'visually-hidden';
+  const hidingClass = acc();
+  const focusOpenClass = selector + '--opened';
 
   if(focus) {
-    toggleButton.forEach((amount, index) => {
-      toggleButton[index].onfocus = () => {
-        toggleSelector.forEach((elememnt, number) => {
-          let classList = toggleSelector[number].classList;
+    toggleButton.forEach(buttonItem => {
+      buttonItem.onfocus = () => {
+        toggleSelector.forEach(selectorItem => {
+          let classList = selectorItem.classList;
+
           if(!(classList.contains(focusOpenClass))){
             classList.add(focusOpenClass);
           }
         })
       }
-      toggleButton[index].onblur = () => {
-        toggleSelector.forEach((elememnt, number) => {
-          toggleSelector[number].classList.remove(focusOpenClass);
+      buttonItem.onblur = () => {
+        toggleSelector.forEach(selectorItem => {
+          selectorItem.classList.remove(focusOpenClass);
         })
       }
     })
   } else {
-    toggleButton.forEach((amount, index) => {
-      toggleButton[index].addEventListener('click', event => {
+    toggleButton.forEach(buttonItem => {
+      buttonItem.addEventListener('click', event => {
         event.preventDefault();
-        toggleSelector.forEach((element, number) => {
-          let classList = toggleSelector[number].classList;
+
+        toggleSelector.forEach(selectorItem => {
+          let classList = selectorItem.classList;
+
           classList.contains(hidingClass) ? classList.remove(hidingClass) : classList.add(hidingClass);
         })
       })
@@ -39,7 +41,8 @@ function selectorToggle(selector, button, accessibility = false, focus = false) 
   }
 }
 
-selectorToggle('', '', false, true);
+selectorToggle('block', 'button');
+
 
 
 

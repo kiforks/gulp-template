@@ -10,13 +10,14 @@ const path = {
             fonts: buildFolder + '/fonts/',
             svg: buildFolder+ '/img/**/sprite.svg',
             retina: [buildFolder + '/img/@1x/', buildFolder + '/img/@2x/', buildFolder + '/img/@3x/'],
-            libs: buildFolder + '/libs/'
+            libs: buildFolder + '/libs/',
+            webp: buildFolder + '/img/**/*.{jpg,png}'
         },
         src: {
             html: [sourceFolder + '/*.html', '!' + sourceFolder + '/_*.html'],
             css: sourceFolder + '/scss/style.scss',
-            js: [sourceFolder + '/js/**/*.js', '!' + sourceFolder + '/js/templates/**/*', '!' + sourceFolder + '/js/**/_*'],
-            jsIgnore: [ sourceFolder + '/js/**/_*'],
+            js: [sourceFolder + '/js/**/*.js', '!' + sourceFolder + '/js/templates/**/*', '!' + sourceFolder + '/js/plugins/**/*'],
+            jsIgnore: [ sourceFolder + '/js/plugins/**/*'],
             img: [sourceFolder + '/img/**/*.{jpg,svg,png,gif,ico,webp}', '!' + sourceFolder + '/img/**/icon-*.svg',  '!' + sourceFolder + '/img/**/_*'],
             imgIgnore: sourceFolder + '/img/**/_*',
             fonts: sourceFolder + '/fonts/**/*.ttf',
@@ -66,7 +67,8 @@ const { src, dest } = require('gulp'),
         htmlmin = require('gulp-htmlmin'),
         ttf2woff = require('gulp-ttf2woff'),
         ttf2woff2 = require('gulp-ttf2woff2'),
-        imageResize = require('gulp-image-resize');
+        imageResize = require('gulp-image-resize'),
+        imageMagick = require('imagemagick');
 
 
 // Server
@@ -144,7 +146,7 @@ function js() {
 function jsIgnoreBuild() {
   return src(path.src.jsIgnore)
     .pipe(plumber())
-    .pipe(dest(path.build.js))
+    .pipe(dest(path.build.js + 'plugins/'))
     .pipe(browserSync.stream())
 }
 
@@ -177,34 +179,39 @@ function ignoreImagesBuild() {
 }
 
   /* Resize to retina + sorting images */
-function retinaImages() {
-  for(let i = 1; i < 2; i++) { // If you don’t need retina images x3 set the value 'i < 3' to 'i < 2' or vice versa
-    return src(path.src.retina)
-      .pipe(imageResize({
-        width: `${i + 1}00%`
-      }))
-      .pipe(rename({
-        suffix: `@${i + 1}x`
-      }))
-      .pipe(dest(path.build.retina[i]))
-  }
-}
+// function retinaImages() {
+//   for(let i = 1; i < 2; i++) { // If you don’t need retina images x3 set the value 'i < 3' to 'i < 2' or vice versa
+//     return src(path.src.retina)
+//       .pipe(imageResize({
+//         width: `${i + 1}00%`
+//       }))
+//       .pipe(rename({
+//         suffix: `@${i + 1}x`
+//       }))
+//       .pipe(dest(path.build.retina[i]))
+//   }
+// }
 
 function imageSorting () {
-    return src(path.build.img + '**/*.{jpg,png}')
-      .pipe(plumber())
-      .pipe(webp({
-        quality: 70
-      }))
+    return src(path.src.img)
       .pipe(dest(path.build.img))
-      .pipe(src(sourceFolder + '/img/**/icon-*.svg')
-      .pipe(svgstore({
-        inlineSvg: true
-      }))
-      .pipe(rename('sprite.svg'))
-      .pipe(dest(path.build.img)))
-      .pipe(src(path.src.img))
-      .pipe(dest(path.build.img))
+}
+
+function sprite() {
+  return src(sourceFolder + '/img/**/icon-*.svg')
+    .pipe(svgstore({
+      inlineSvg: true
+    }))
+    .pipe(rename('sprite.svg'))
+    .pipe(dest(path.build.img))
+}
+
+function webpBuild() {
+  return src(path.build.webp)
+    .pipe(webp({
+      quality: 70
+    }))
+    .pipe(dest(path.build.img))
 }
 
 
@@ -261,20 +268,22 @@ function libs() {
 
 // Build
 const fonts = gulp.series(ttfConversion, woffConversion);
-const imageBuild = gulp.series(retinaImages, ignoreImagesBuild, imageSorting, images); // if you don't need retina images just delete task 'retinaImages' from here
+const imageBuild = gulp.series(ignoreImagesBuild, sprite, imageSorting, webpBuild, images); // if you don't need retina images just delete task 'retinaImages' from here
 const build = gulp.series(clean, gulp.series(imageBuild, css, html, js, jsIgnoreBuild, libs, fonts));
 const watch = gulp.parallel(watchFiles, serve);
 
 
 
 //Exports
+exports.webpBuild = webpBuild;
+exports.sprite = sprite;
 exports.libs = libs;
 exports.jsIgnoreBuild = jsIgnoreBuild;
 exports.ignoreImagesBuild = ignoreImagesBuild;
 exports.woffConversion = woffConversion;
 exports.ttfConversion = ttfConversion;
 exports.imageSorting = imageSorting;
-exports.retinaImages = retinaImages;
+// exports.retinaImages = retinaImages;
 exports.cleanGit = cleanGit;
 exports.clean = clean;
 exports.css = css;
