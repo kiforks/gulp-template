@@ -1,6 +1,6 @@
 src/scss/style.scss
-src/scss/common/global/**/*.scss
 src/scss/fonts.scss
 src/scss/mixins/**/*
-*.css
+src/scss/variables/**/*
+**/*.css
 

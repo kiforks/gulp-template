@@ -31,6 +31,91 @@
   }
 }
 
+@mixin active-hover-clean {
+  &:hover,
+  &:active {
+    @content;
+  }
+}
+
+@mixin active-scale {
+  &:active {
+    transform: scale($downscale);
+    opacity: $down-opacity;
+  }
+}
+
+@mixin focus-opacity {
+  @include hover-opacity;
+  @include active-opacity;
+  transition: opacity $transition-duration ease-in-out;
+}
+
+@mixin focus-scale {
+  transition: $transition-duration ease-in-out;
+
+  &:hover,
+  &:focus {
+    transform: scale($hover-scale);
+  }
+
+  &:active {
+    transform: scale($downscale);
+    opacity: $down-opacity;
+  }
+}
+
+@mixin focus-color($color: white) {
+  outline: 0;
+  transition: color $transition-duration ease-in-out, opacity $transition-duration ease-in-out;
+  @include active-opacity;
+
+  &:hover,
+  &:focus {
+    color: $color;
+  }
+}
+
+@mixin disabled-before {
+  &::before,
+  &:active::before,
+  &:hover::before {
+    @content;
+  }
+}
+
+@mixin disabled-after {
+  &::after,
+  &:active::after,
+  &:hover::after {
+    @content;
+  }
+}
+
+@mixin disabled-before-after {
+  &::after,
+  &:active::after,
+  &:hover::after,
+  &::before,
+  &:active::before,
+  &:hover::before {
+    @content;
+  }
+}
+
+@mixin disabled-focus-opacity($opacity: 1) {
+  & {
+    opacity: $opacity;
+  }
+
+  &:active,
+  &:hover,
+  &:focus {
+    opacity: $opacity;
+  }
+}
+
+
 // Pseudo-elements
   /* Before & after */
 @mixin before {
@@ -79,6 +164,97 @@
   }
 }
 
+@mixin before-after-active {
+  &:active::before,
+  &:active::after {
+    @content;
+  }
+}
+
+@mixin before-active {
+  &:active::before {
+    @content;
+  }
+}
+
+@mixin after-active {
+  &:active::after {
+    @content;
+  }
+}
+
+@mixin before-after-active-opacity {
+  &:active::before,
+  &:active::after {
+    opacity: $down-opacity;
+  }
+}
+
+@mixin before-active-opacity {
+  &:active::before {
+    opacity: $down-opacity;
+  }
+}
+
+@mixin after-active-opacity {
+  &:active::after {
+    opacity: $down-opacity;
+  }
+}
+
+@mixin before-after-hover {
+  &:hover::before,
+  &:hover::after {
+    @content;
+  }
+}
+
+@mixin before-hover {
+  &:hover::before {
+    @content;
+  }
+}
+
+@mixin after-hover {
+  &:hover::after {
+    @content;
+  }
+}
+
+@mixin before-after-hover-opacity {
+  &:hover::before,
+  &:hover::after {
+    opacity: $hover-opacity;
+  }
+}
+
+@mixin before-hover-opacity {
+  &:hover::before {
+    opacity: $hover-opacity;
+  }
+}
+
+@mixin after-hover-opacity {
+  &:hover::after {
+    opacity: $hover-opacity;
+  }
+}
+
+@mixin before-after-focus {
+  @include before-after-hover-opacity;
+  @include before-after-active-opacity;
+}
+
+@mixin before-focus {
+  @include before-hover-opacity;
+  @include before-active-opacity;
+}
+
+@mixin after-focus {
+  @include after-hover-opacity;
+  @include after-active-opacity;
+}
+
   /* Placeholder */
 @mixin placeholder {
   &::-webkit-input-placeholder {
@@ -99,24 +275,27 @@
 }
 
 @mixin placeholder-focus{
+  & {
+    outline: 0;
+  }
   &:focus::-webkit-input-placeholder {
-    text-indent: 1000px;
-    -webkit-transition: text-indent 0.3s ease-in-out;
-    transition: text-indent 0.3s ease-in-out;
+    opacity: 0;
+    -webkit-transition: $transition-delay ease-in-out;
+    transition: $transition-delay ease-in-out;
   }
   &:focus:-moz-placeholder {
-    text-indent: 1000px;
-    -moz-transition: text-indent 0.3s ease-in-out;
-    transition: text-indent 0.3s ease-in-out;
+    opacity: 0;
+    -moz-transition: $transition-delay ease-in-out;
+    transition: $transition-delay ease-in-out;
   }
   &:focus::-moz-placeholder {
-    text-indent: 1000px;
-    -moz-transition: text-indent 0.3s ease-in-out;
-    transition: text-indent 0.3s ease-in-out;
+    opacity: 0;
+    -moz-transition: $transition-delay ease-in-out;
+    transition: $transition-delay ease-in-out;
   }
   &:focus:-ms-input-placeholder {
-    text-indent: 1000px;
-    -ms-transition: text-indent 0.3s ease-in-out;
-    transition: text-indent 0.3s ease-in-out;
+    opacity: 0;
+    -ms-transition: $transition-delay ease-in-out;
+    transition: $transition-delay ease-in-out;
   }
 }

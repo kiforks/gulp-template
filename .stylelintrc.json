@@ -16,6 +16,7 @@
     "rule-empty-line-before": ["always",{
       "except": ["first-nested"]
     }],
+    "color-hex-case": "upper",
     "string-quotes": "single",
     "no-descending-specificity": true,
     "declaration-empty-line-before": "never",

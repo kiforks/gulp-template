@@ -8,11 +8,13 @@
 // Mixins
 'mixins/font-face',
 'mixins/media',
-'mixins/other',
 'mixins/reset',
 'mixins/center',
 'mixins/pseudo',
-'mixins/js',
+'mixins/other',
+'mixins/js/object-fit',
+'mixins/js/webp-retina',
+'mixins/js/swiper',
 
 // Normalize + fonts
 '../../node_modules/normalize.css/normalize',
@@ -26,16 +28,17 @@
 'blocks/global/wrapper',
 
 // JS
-
-
+'js/aos',
 
 // Blocks
   /* global */
-'blocks/button',
-'blocks/title',
-'blocks/header',
-'blocks/footer',
+'blocks/global/site-map',
+'blocks/global/animations',
+'blocks/global/button',
+'blocks/global/title',
+'blocks/global/subtitle',
+'blocks/global/header',
+'blocks/global/footer',
 
   /* main */
-'blocks/nav',
 'blocks/main';

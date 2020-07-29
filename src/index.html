@@ -4,26 +4,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <meta charset="UTF-8">
-  <title>Project</title>
+  <title>Main</title>
   <link rel="stylesheet" href="css/style.min.css">
-  <link rel="icon" type="image/png" sizes="16x16" href="img/favicons/*.png">
-  <link rel="preload" href="fonts/*.woff2" as="font">
-  <include src="src/posthtml/templates/webp.html"></include>
+  <include src="src/html/templates/favicon.html"></include>
+  <include src="src/html/templates/fonts.html"></include>
 </head>
-<body>
-  <include src="src/posthtml/blocks/_header.html"></include>
+<body class="main-body">
+<!--  <include src="src/html/templates/sprite.html"></include>-->
+  <include src="src/html/blocks/_header.html"></include>
 
   <main class="main">
 
   </main>
 
-   <include src="src/posthtml/blocks/_footer.html"></include>
+  <include src="src/html/blocks/_footer.html"></include>
 
-<!--JS-->
+  <!--JS-->
+  <script src="js/plugins/aos.js"></script>
   <script src="js/script.js"></script>
-
-  <script>
-    objectFitImages();
-  </script>
 </body>
 </html>

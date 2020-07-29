@@ -18,8 +18,14 @@
   }
 }
 
-@mixin desktop {
-  @media (min-width: $desktop-width) {
+@mixin desktop-small {
+  @media (max-width: $desktop-small-max) {
+    @content;
+  }
+}
+
+@mixin desktop-middle {
+  @media (max-width: $desktop-middle-max) {
     @content;
   }
 }
@@ -35,5 +41,18 @@
     @content;
   }
 }
+
+@mixin min-max-desktop-small {
+  @media (min-width: $desktop-small) and (max-width: $desktop-small-max) {
+    @content;
+  }
+}
+
+@mixin min-max-desktop-middle {
+  @media (min-width: $desktop-middle) and (max-width: $desktop-middle-max) {
+    @content;
+  }
+}
+
 
 
