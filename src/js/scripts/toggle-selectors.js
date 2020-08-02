@@ -2,12 +2,12 @@
 
 function toggleSelectors(button, selector, accessibility = false, focus = false) {
   const acc = () => accessibility ? visuallyHidden : closedSelector;
-  const toggleSelector = document.querySelectorAll('.' + selector);
-  const toggleButton = document.querySelectorAll('.' + button);
-  const closedSelector = selector + '--closed';
+  const toggleSelector = document.querySelectorAll(`.${selector}`);
+  const toggleButton = document.querySelectorAll(`.${button}`);
+  const closedSelector = `${selector}--closed`;
   const visuallyHidden = 'visually-hidden';
   const hidingClass = acc();
-  const focusOpenClass = selector + '--opened';
+  const focusOpenClass = `${selector}--opened`;
 
   if(focus) {
     toggleButton.forEach(buttonItem => {

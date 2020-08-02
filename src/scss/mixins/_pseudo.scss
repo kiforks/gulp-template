@@ -19,6 +19,13 @@
   }
 }
 
+@mixin hover-clean {
+  &:hover,
+  &:focus {
+    @content;
+  }
+}
+
 @mixin active{
   &:active {
     @content;
@@ -31,16 +38,23 @@
   }
 }
 
-@mixin active-hover-clean {
-  &:hover,
+@mixin active-clean {
   &:active {
     @content;
   }
 }
 
-@mixin active-scale {
+@mixin active-hover-clean {
+  &:hover,
+  &:focus,
   &:active {
-    transform: scale($downscale);
+    @content;
+  }
+}
+
+@mixin active-scale-opacity {
+  &:active {
+    transform: scale($down-scale);
     opacity: $down-opacity;
   }
 }
@@ -51,7 +65,7 @@
   transition: opacity $transition-duration ease-in-out;
 }
 
-@mixin focus-scale {
+@mixin focus-scale-opacity {
   transition: $transition-duration ease-in-out;
 
   &:hover,
@@ -60,7 +74,7 @@
   }
 
   &:active {
-    transform: scale($downscale);
+    transform: scale($down-scale);
     opacity: $down-opacity;
   }
 }
@@ -79,7 +93,8 @@
 @mixin disabled-before {
   &::before,
   &:active::before,
-  &:hover::before {
+  &:hover::before,
+  &:focus::before {
     @content;
   }
 }
@@ -87,7 +102,8 @@
 @mixin disabled-after {
   &::after,
   &:active::after,
-  &:hover::after {
+  &:hover::after,
+  &:focus::after {
     @content;
   }
 }
@@ -96,9 +112,11 @@
   &::after,
   &:active::after,
   &:hover::after,
+  &:focus::after,
   &::before,
   &:active::before,
-  &:hover::before {
+  &:hover::before,
+  &:focus::before {
     @content;
   }
 }
@@ -240,7 +258,7 @@
   }
 }
 
-@mixin before-after-focus {
+@mixin before-after-focus-opacity {
   @include before-after-hover-opacity;
   @include before-after-active-opacity;
 }
