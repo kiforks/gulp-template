@@ -55,6 +55,14 @@
       },
       {
         "type": "rule",
+        "selector": "^&:first"
+      },
+      {
+        "type": "rule",
+        "selector": "^&:last"
+      },
+      {
+        "type": "rule",
         "selector": "^&--"
       },
       {

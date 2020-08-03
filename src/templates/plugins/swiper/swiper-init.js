@@ -52,11 +52,3 @@ initSwiper(mainSlider);
 
 
 
-
-
-
-
-
-
-
-

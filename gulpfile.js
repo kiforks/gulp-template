@@ -17,9 +17,11 @@ const path = {
     libs: `${buildFolder}/libs/`,
     video:  `${buildFolder}/video`,
     favIcons: `${buildFolder}/favicons`,
+    plugins: `${buildFolder}/js/plugins`,
     uncompressed: {
       js:  `${buildFolder}/uncompressed/js`,
-      html:  `${buildFolder}/uncompressed/html`
+      html:  `${buildFolder}/uncompressed/html`,
+      plugins: `${buildFolder}/uncompressed/js/plugins`
     }
   },
   src: {
@@ -27,7 +29,7 @@ const path = {
     css: `${sourceFolder}/scss/style.scss`,
     scss: [`${sourceFolder}/scss/blocks/**/*.scss`],
     js: [`${sourceFolder}/js/**/*.js`, `!${sourceFolder}/js/plugins/**/*`],
-    jsIgnore: [`${sourceFolder}/js/plugins/**/*`],
+    plugins: [`${sourceFolder}/js/plugins/**/*`],
     img: [`${sourceFolder}/img/**/*.{jpg,svg,png,gif,ico,webp}`, `!${sourceFolder}/img/**/icon-*.svg`,  `!${sourceFolder}/img/**/_*`],
     imgIgnore: `${sourceFolder}/img/**/_*`,
     fonts: `${sourceFolder}/fonts/**/*.ttf`,
@@ -166,9 +168,10 @@ function js() {
 }
 
 function jsPlugins() {
-  return src(path.src.jsIgnore)
+  return src(path.src.plugins)
     .pipe(plumber())
-    .pipe(dest(`${path.build.js}plugins/`))
+    .pipe(dest(path.build.plugins))
+    .pipe(dest(path.build.uncompressed.plugins))
     .pipe(browserSync.stream())
 }
 
