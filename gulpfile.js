@@ -85,7 +85,8 @@ const { src, dest } = require('gulp'),
         htmlmin = require('gulp-htmlmin'),
         ttf2woff = require('gulp-ttf2woff'),
         ttf2woff2 = require('gulp-ttf2woff2'),
-        imageResize = require('gulp-image-resize');
+        imageResize = require('gulp-image-resize'),
+        csscomb = require('gulp-csscomb');
 
 
 // Server
@@ -148,6 +149,12 @@ function stylelint() {
       ]
     }))
     .pipe(browserSync.stream())
+}
+
+function orderCSS () {
+  return src('build/css/*.css')
+    .pipe(csscomb())
+    .pipe(dest(path.build.css));
 }
 
 
@@ -299,7 +306,7 @@ function libs() {
 
 // Build
 const javaScript = gulp.parallel(js, jsPlugins);
-const styles = gulp.series(css, stylelint);
+const styles = gulp.series(css, stylelint, orderCSS);
 const fonts = gulp.series(ttfConversion, woffConversion);
 const imaging = gulp.series(ignoredImages, favIcons, sprite, sortingImages, /* retina,   webpBuild, */  images);
 const build = gulp.series(clean, gulp.parallel(imaging, videoBuild, css, html, javaScript, libs, fonts));
@@ -338,6 +345,7 @@ exports.images = images;
 exports.js = js;
 exports.favIcons = favIcons;
 exports.stylelint = stylelint;
+exports.orderCSS = orderCSS;
 exports.styles = styles;
 exports.javaScript = javaScript;
 exports.build = build;

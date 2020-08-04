@@ -29,11 +29,11 @@
 }
 
 @mixin reset-input {
-  border: none;
-  text-decoration: none;
-  color: inherit;
   padding: 0;
   margin: 0;
+  text-decoration: none;
+  color: inherit;
+  border: none;
 }
 
 
