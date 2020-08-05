@@ -38,7 +38,7 @@ const path = {
     libs: `${sourceFolder}/libs/**/*`,
     video: `${sourceFolder}/video/**/*`,
     sprite: `${sourceFolder}/img/**/icon-*.svg`,
-    favIcons: `${sourceFolder}/favicons/**/*`
+    favIcons: `${sourceFolder}/favicons/favicon`
   },
   watch: {
     html: `${sourceFolder}/**/*.html`,
@@ -86,7 +86,9 @@ const { src, dest } = require('gulp'),
         ttf2woff = require('gulp-ttf2woff'),
         ttf2woff2 = require('gulp-ttf2woff2'),
         imageResize = require('gulp-image-resize'),
-        csscomb = require('gulp-csscomb');
+        csscomb = require('gulp-csscomb'),
+        realFavicon = require ('gulp-real-favicon'),
+        FAVICON_DATA_FILE = 'faviconData.json';
 
 
 // Server
@@ -211,12 +213,6 @@ function ignoredImages() {
     .pipe(dest(path.build.img))
 }
 
-function favIcons() {
-  return src(path.src.favIcons)
-    .pipe(dest(path.build.favIcons))
-    .pipe(browserSync.stream())
-}
-
   /* Resize to retina + sorting images */
 function retina() {
   return src(path.src.retina)
@@ -278,6 +274,68 @@ function ttfConversion() {
     }))
     .pipe(dest(`${sourceFolder}/fonts/`))
     .pipe(src(path.src.fonts))
+}
+
+
+//Favicons
+function favIcons(done) {
+  realFavicon.generateFavicon({
+    masterPicture: `${path.src.favIcons}.svg`,  // Change format to png if you need it. WARNING! NAME MUST BE 'favicon'
+    dest: path.build.favIcons,
+    iconsPath: '/',
+    design: {
+      ios: {
+        pictureAspect: 'noChange',
+        assets: {
+          ios6AndPriorIcons: false,
+          ios7AndLaterIcons: false,
+          precomposedIcons: false,
+          declareOnlyDefaultIcon: true
+        }
+      },
+      desktopBrowser: {
+        design: 'raw'
+      },
+      windows: {
+        pictureAspect: 'noChange',
+        backgroundColor: '#da532c',
+        onConflict: 'override',
+        assets: {
+          windows80Ie10Tile: false,
+          windows10Ie11EdgeTiles: {
+            small: false,
+            medium: true,
+            big: false,
+            rectangle: false
+          }
+        }
+      },
+      androidChrome: {
+        pictureAspect: 'noChange',
+        themeColor: '#ffffff',
+        manifest: {
+          display: 'standalone',
+          orientation: 'notSet',
+          onConflict: 'override',
+          declared: true
+        },
+        assets: {
+          legacyIcon: false,
+          lowResolutionIcons: false
+        }
+      }
+    },
+    settings: {
+      scalingAlgorithm: 'Mitchell',
+      errorOnImageTooSmall: false,
+      readmeFile: false,
+      htmlCodeFile: false,
+      usePathAsIs: false
+    },
+    markupFile: FAVICON_DATA_FILE
+  }, function() {
+    done();
+  });
 }
 
 
@@ -354,4 +412,3 @@ exports.default = watch;
 exports.html = build;
 exports.watch = watch;
 exports.imaging = imaging;
-
