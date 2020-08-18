@@ -1,8 +1,7 @@
 // Pseudo-classes
 @mixin hover {
-  & {
-    outline: none;
-  }
+  outline: none;
+
   &:hover,
   &:focus {
     @content;
@@ -10,23 +9,24 @@
 }
 
 @mixin hover-opacity {
-  & {
-    outline: none;
-  }
+  outline: none;
+
   &:hover,
   &:focus {
     opacity: $hover-opacity;
   }
 }
 
-@mixin hover-clean {
+@mixin hover-scale($scale: $hover-scale) {
+  outline: 0;
+
   &:hover,
   &:focus {
-    @content;
+    transform: scale($scale);
   }
 }
 
-@mixin active{
+@mixin active {
   &:active {
     @content;
   }
@@ -38,23 +38,9 @@
   }
 }
 
-@mixin active-clean {
+@mixin active-scale($scale: $down-scale) {
   &:active {
-    @content;
-  }
-}
-
-@mixin active-hover-clean {
-  &:hover,
-  &:focus,
-  &:active {
-    @content;
-  }
-}
-
-@mixin active-scale-opacity {
-  &:active {
-    transform: scale($down-scale);
+    transform: scale($scale);
     opacity: $down-opacity;
   }
 }
@@ -65,17 +51,44 @@
   transition: opacity $transition-duration ease-in-out;
 }
 
-@mixin focus-scale-opacity {
+@mixin focus-scale($focus-scale: $hover-scale, $active-scale: $down-scale) {
   transition: $transition-duration ease-in-out;
+  outline: 0;
 
   &:hover,
   &:focus {
-    transform: scale($hover-scale);
+    transform: scale($focus-scale);
   }
 
   &:active {
-    transform: scale($down-scale);
+    transform: scale($active-scale);
     opacity: $down-opacity;
+  }
+}
+
+@mixin disabled-focus-scale {
+  cursor: default;
+  opacity: 1;
+
+  &:hover,
+  &:focus {
+    transform: translate(0);
+  }
+
+  &:active {
+    transform: translate(0);
+    opacity: 1;
+  }
+}
+
+@mixin disabled-focus-opacity {
+  cursor: default;
+  opacity: 1;
+
+  &:active,
+  &:hover,
+  &:focus {
+    opacity: 1;
   }
 }
 
@@ -87,49 +100,6 @@
   &:hover,
   &:focus {
     color: $color;
-  }
-}
-
-@mixin disabled-before {
-  &::before,
-  &:active::before,
-  &:hover::before,
-  &:focus::before {
-    @content;
-  }
-}
-
-@mixin disabled-after {
-  &::after,
-  &:active::after,
-  &:hover::after,
-  &:focus::after {
-    @content;
-  }
-}
-
-@mixin disabled-before-after {
-  &::after,
-  &:active::after,
-  &:hover::after,
-  &:focus::after,
-  &::before,
-  &:active::before,
-  &:hover::before,
-  &:focus::before {
-    @content;
-  }
-}
-
-@mixin disabled-focus-opacity($opacity: 1) {
-  & {
-    opacity: $opacity;
-  }
-
-  &:active,
-  &:hover,
-  &:focus {
-    opacity: $opacity;
   }
 }
 
@@ -201,25 +171,6 @@
   }
 }
 
-@mixin before-after-active-opacity {
-  &:active::before,
-  &:active::after {
-    opacity: $down-opacity;
-  }
-}
-
-@mixin before-active-opacity {
-  &:active::before {
-    opacity: $down-opacity;
-  }
-}
-
-@mixin after-active-opacity {
-  &:active::after {
-    opacity: $down-opacity;
-  }
-}
-
 @mixin before-after-hover {
   &:hover::before,
   &:hover::after {
@@ -237,40 +188,6 @@
   &:hover::after {
     @content;
   }
-}
-
-@mixin before-after-hover-opacity {
-  &:hover::before,
-  &:hover::after {
-    opacity: $hover-opacity;
-  }
-}
-
-@mixin before-hover-opacity {
-  &:hover::before {
-    opacity: $hover-opacity;
-  }
-}
-
-@mixin after-hover-opacity {
-  &:hover::after {
-    opacity: $hover-opacity;
-  }
-}
-
-@mixin before-after-focus-opacity {
-  @include before-after-hover-opacity;
-  @include before-after-active-opacity;
-}
-
-@mixin before-focus {
-  @include before-hover-opacity;
-  @include before-active-opacity;
-}
-
-@mixin after-focus {
-  @include after-hover-opacity;
-  @include after-active-opacity;
 }
 
   /* Placeholder */
@@ -292,28 +209,23 @@
   }
 }
 
-@mixin placeholder-focus{
-  & {
-    outline: 0;
-  }
+@mixin placeholder-focus {
+  outline: 0;
+
   &:focus::-webkit-input-placeholder {
     opacity: 0;
-    -webkit-transition: $transition-delay ease-in-out;
-    transition: $transition-delay ease-in-out;
+    transition: $transition-duration ease-in-out;
   }
   &:focus:-moz-placeholder {
     opacity: 0;
-    -moz-transition: $transition-delay ease-in-out;
-    transition: $transition-delay ease-in-out;
+    transition: $transition-duration ease-in-out;
   }
   &:focus::-moz-placeholder {
     opacity: 0;
-    -moz-transition: $transition-delay ease-in-out;
-    transition: $transition-delay ease-in-out;
+    transition: $transition-duration ease-in-out;
   }
   &:focus:-ms-input-placeholder {
     opacity: 0;
-    -ms-transition: $transition-delay ease-in-out;
-    transition: $transition-delay ease-in-out;
+    transition: $transition-duration ease-in-out;
   }
 }

@@ -1,6 +1,6 @@
 .container {
-  @include center-margin;
   @include padding-desktop;
+  @include center-margin;
   width: 100%;
   max-width: $desktop-width + ($desktop-padding * 2);
 }

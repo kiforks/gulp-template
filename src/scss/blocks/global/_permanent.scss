@@ -9,8 +9,26 @@ html {
 }
 
 body {
-  min-width: $mobile-width;
-  max-width: $desktop-width;
+  @include desktop-middle {
+    font-size: $font-size-middle;
+  }
+
+  @include desktop-small {
+    font-size: $font-size-small;
+  }
+
+  @include tablet {
+    font-size: $font-size-tablet;
+  }
+
+  @include mobile {
+    font-size: $font-size-mobile;
+  }
+
+  @include center-margin;
+  position: relative;
+  min-width: 320px;
+  max-width: 1920px;
   font-weight: $font-weight;
   font-size: $font-size;
   line-height: $line-height;
@@ -24,6 +42,7 @@ body {
 }
 
 img {
+  width: 100%;
   max-width: 100%;
   height: 100%;
   max-height: 100%;
@@ -42,7 +61,8 @@ iframe {
   border: none;
 }
 
-path {
+path,
+g {
   fill: inherit;
 }
 
@@ -55,5 +75,5 @@ button {
 
 ::selection {
   color: white;
-  background-color: #004fe4;
+  background-color: #004FE4;
 }

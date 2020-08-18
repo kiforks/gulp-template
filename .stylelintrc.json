@@ -9,12 +9,29 @@
     "stylelint-config-htmlacademy"
   ],
   "rules": {
+    "color-hex-case": "upper",
     "no-empty-source": null,
+    "string-quotes": "single",
     "plugin/declaration-block-no-ignored-properties": true,
     "order/order": [
       {
         "type": "at-rule",
         "name": "include"
+      },
+      {
+        "type": "at-rule",
+        "name": "include",
+        "parameter": "reset"
+      },
+      {
+        "type": "at-rule",
+        "name": "include",
+        "parameter": "padding"
+      },
+      {
+        "type": "at-rule",
+        "name": "include",
+        "parameter": "margin"
       },
       "custom-properties",
       "declarations",
