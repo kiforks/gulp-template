@@ -1,44 +1,38 @@
 'use strict';
 
-function toggleSelectors(button, selector, accessibility = false, focus = false) {
-  const acc = () => accessibility ? visuallyHidden : closedSelector;
-  const toggleSelector = document.querySelectorAll(`.${selector}`);
-  const toggleButton = document.querySelectorAll(`.${button}`);
-  const closedSelector = `${selector}--closed`;
-  const visuallyHidden = 'visually-hidden';
-  const hidingClass = acc();
-  const focusOpenClass = `${selector}--opened`;
+function toggleClass(object) {
+  let itemClass = `${object.toggleItem}`;
+  let buttonClass = `${object.toggleButton}`;
+  let activeClass = '--active';
+  let itemHasToggle;
+  let itemActiveClass = `${itemClass + activeClass}`;
+  let toggleItem = document.querySelectorAll(`.${itemClass}`);
+  let toggleButton = document.querySelectorAll(`.${buttonClass}`);
 
-  if(focus) {
-    toggleButton.forEach(buttonItem => {
-      buttonItem.onfocus = () => {
-        toggleSelector.forEach(selectorItem => {
-          let classList = selectorItem.classList;
+  toggleButton.forEach((button) => {
+    button.onclick = event => {
+      event.preventDefault();
 
-          if(!(classList.contains(focusOpenClass))){
-            classList.add(focusOpenClass);
-          }
-        })
-      };
-      buttonItem.onblur = () => {
-        toggleSelector.forEach(selectorItem => {
-          selectorItem.classList.remove(focusOpenClass);
-        })
-      }
-    })
-  } else {
-    toggleButton.forEach(buttonItem => {
-      buttonItem.addEventListener('click', event => {
-        event.preventDefault();
+      toggleItem.forEach(item => {
+        itemHasToggle = item.classList;
 
-        toggleSelector.forEach(selectorItem => {
-          let classList = selectorItem.classList;
-
-          classList.contains(hidingClass) ? classList.remove(hidingClass) : classList.add(hidingClass);
-        })
+        itemHasToggle.contains(itemActiveClass) ? itemHasToggle.remove(itemActiveClass) : itemHasToggle.add(itemActiveClass);
       })
-    })
-  }
+    }
+  })
 }
 
+let toggleObjects = [
+    {
+      toggleItem: 'list__item',
+      toggleButton: 'button'
+    },
+    {
+      toggleItem: 'list__item-2',
+      toggleButton: 'button-2'
+    }
+  ];
 
+let toggleClassInit = objects => objects.forEach(object => toggleClass(object));
+
+toggleClassInit(toggleObjects);
