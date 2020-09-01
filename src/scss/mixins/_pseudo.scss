@@ -103,6 +103,17 @@
   }
 }
 
+@mixin focus-fill($fill: black) {
+  outline: 0;
+  transition: fill $transition-duration ease-in-out, opacity $transition-duration ease-in-out;
+  @include active-opacity;
+
+  &:hover,
+  &:focus {
+    fill: $fill;
+  }
+}
+
 
 // Pseudo-elements
   /* Before & after */
