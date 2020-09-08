@@ -1,3 +1,5 @@
+'use strict';
+
 function modalInit(object) {
   if(!document.querySelector(`#${object.content}`)) {
     return;
@@ -66,13 +68,15 @@ function modalInit(object) {
   currentModal.addEventListener('click', listener);
 
   openingButton && openingButton.forEach(button => {
-    button.onclick = () => modal.open();
+    button.onclick = event => {
+      event.preventDefault();
+      modal.open();
+    }
   })
 
   return Object.assign(modal, {
     destroy() {
       const template = document.querySelector(`#${object.content}`);
-
       destroyed = true;
 
       currentModal.remove();
@@ -97,10 +101,9 @@ class Modal {
     this.openingButton = options.openingButton ? options.openingButton : false;
     this.content = options.content;
 
-    return {
-      ...this,
+    return Object.assign(this, {
       ...modalInit(this)
-    }
+    });
   }
 }
 
