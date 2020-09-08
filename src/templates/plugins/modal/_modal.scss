@@ -1,0 +1,81 @@
+.modal {
+  &--active,
+  &--hide {
+    .modal__overlay,
+    .modal__window {
+      z-index: 1000;
+      opacity: 1;
+    }
+
+    .modal__overlay {
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    .modal__window {
+      @include center-transform;
+    }
+  }
+
+  &--hide {
+    .modal__overlay {
+      background-color: rgba(0, 0, 0, 0);
+    }
+
+    .modal__window {
+      top: -200px;
+    }
+  }
+}
+
+.modal__window,
+.modal__overlay {
+  z-index: -100;
+  opacity: 0;
+}
+
+.modal__overlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0);
+  transition: background $transition-duration ease-in;
+}
+
+.modal__window {
+  position: absolute;
+  top: -200px;
+  width: 600px;
+  padding: 50px 40px 45px;
+  background-color: white;
+  border-radius: 5px;
+  transition: top $transition-duration ease-in;
+}
+
+.modal__closing-button {
+  @include focus-scale();
+  @include reset-button;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 10;
+  width: 24px;
+  height: 24px;
+
+  @include before-after {
+    @include center-transform-vertical;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: black;
+  }
+
+  @include before-clean {
+    transform: rotate(45deg);
+  }
+
+  @include after-clean {
+    transform: rotate(-45deg);
+  }
+}
