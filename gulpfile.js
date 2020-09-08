@@ -59,43 +59,43 @@ const path = {
 
 // Plugins
 const { src, dest } = require('gulp'),
-        gulp = require('gulp'),
-        del = require('del'),
-        browserSync = require('browser-sync').create(),
-        pngMinify = require('imagemin-pngquant'),
-        fonter = require('gulp-fonter'),
-        posthtml = require('gulp-posthtml'),
-        htmlValidator = require('gulp-w3c-html-validator'),
-        include = require('posthtml-include'),
-        scss = require('gulp-sass'),
-        autoprefixer = require('gulp-autoprefixer'),
-        groupMedia = require('gulp-group-css-media-queries'),
-        csso = require('gulp-csso'),
-        rename = require('gulp-rename'),
-        plumber = require('gulp-plumber'),
-        eslint = require('gulp-eslint'),
-        babel = require('gulp-babel'),
-        terser = require('gulp-terser'),
-        concat = require('gulp-concat'),
-        bemValidator = require('gulp-html-bem-validator'),
-        gulpStylelint = require('gulp-stylelint'),
-        imagemin = require('gulp-imagemin'),
-        webp = require('gulp-webp'),
-        svgstore = require('gulp-svgstore'),
-        htmlmin = require('gulp-htmlmin'),
-        ttf2woff = require('gulp-ttf2woff'),
-        ttf2woff2 = require('gulp-ttf2woff2'),
-        imageResize = require('gulp-image-resize'),
-        csscomb = require('gulp-csscomb'),
-        realFavicon = require ('gulp-real-favicon'),
-        FAVICON_DATA_FILE = 'faviconData.json';
+  gulp = require('gulp'),
+  del = require('del'),
+  browserSync = require('browser-sync').create(),
+  pngMinify = require('imagemin-pngquant'),
+  fonter = require('gulp-fonter'),
+  posthtml = require('gulp-posthtml'),
+  htmlValidator = require('gulp-w3c-html-validator'),
+  include = require('posthtml-include'),
+  scss = require('gulp-sass'),
+  autoprefixer = require('gulp-autoprefixer'),
+  groupMedia = require('gulp-group-css-media-queries'),
+  csso = require('gulp-csso'),
+  rename = require('gulp-rename'),
+  plumber = require('gulp-plumber'),
+  eslint = require('gulp-eslint'),
+  babel = require('gulp-babel'),
+  terser = require('gulp-terser'),
+  concat = require('gulp-concat'),
+  bemValidator = require('gulp-html-bem-validator'),
+  gulpStylelint = require('gulp-stylelint'),
+  imagemin = require('gulp-imagemin'),
+  webp = require('gulp-webp'),
+  svgstore = require('gulp-svgstore'),
+  htmlmin = require('gulp-htmlmin'),
+  ttf2woff = require('gulp-ttf2woff'),
+  ttf2woff2 = require('gulp-ttf2woff2'),
+  imageResize = require('gulp-image-resize'),
+  csscomb = require('gulp-csscomb'),
+  realFavicon = require ('gulp-real-favicon'),
+  FAVICON_DATA_FILE = 'faviconData.json';
 
 
 // Server
 function serve() {
   browserSync.init({
     server: {
-        baseDir: `./${buildFolder}/`
+      baseDir: `./${buildFolder}/`
     },
     port: 3000,
     notify: false
@@ -108,7 +108,7 @@ function html() {
   return src(path.src.html)
     .pipe(plumber())
     .pipe(posthtml([
-        include()
+      include()
     ]))
     .pipe(htmlValidator())
     .pipe(bemValidator())
@@ -126,7 +126,7 @@ function css() {
   return src(path.src.css)
     .pipe(plumber())
     .pipe(scss({
-        outputStyle: 'expanded'
+      outputStyle: 'expanded'
     }))
     .pipe(groupMedia())
     .pipe(csscomb())
@@ -163,7 +163,7 @@ function js() {
     .pipe(eslint.format())
     .pipe(dest(path.build.uncompressed.js))
     .pipe(babel({
-        presets: ['@babel/env']
+      presets: ['@babel/env']
     }))
     .pipe(concat('script.js'))
     .pipe(terser())
@@ -208,8 +208,8 @@ function ignoredImages() {
     .pipe(dest(path.build.img))
 }
 
-  /* Resize to retina + sorting images */
-function retina() {
+/* Resize to retina + sorting images */
+function retinaX2() {
   return src(path.src.retina)
     .pipe(imageResize({
       width: `200%`
@@ -218,6 +218,10 @@ function retina() {
       suffix: `@2x`
     }))
     .pipe(dest(path.build.retina.x2))
+}
+
+function retinaX3() {
+  return src(path.src.retina)
     .pipe(imageResize({
       width: `300%`
     }))
@@ -251,7 +255,7 @@ function webpBuild() {
 
 
 // Fonts
-  /* TTF to WOFF/WOFF2 */
+/* TTF to WOFF/WOFF2 */
 function woffConversion() {
   return src(path.src.fonts)
     .pipe(ttf2woff2())
@@ -261,7 +265,7 @@ function woffConversion() {
     .pipe(dest(path.build.fonts))
 }
 
-  /* OTF to TTF*/
+/* OTF to TTF*/
 function ttfConversion() {
   return src(path.src.otf)
     .pipe(fonter({
@@ -358,11 +362,12 @@ function libs() {
 
 
 // Build
+const retina = gulp.parallel(retinaX2, retinaX3);
 const javaScript = gulp.parallel(js, jsPlugins);
 const styles = gulp.series(css, stylelint);
 const fonts = gulp.series(ttfConversion, woffConversion);
-const imaging = gulp.series(ignoredImages, sprite, sortingImages, /* retina,   webpBuild, */  images);
-const build = gulp.series(clean, gulp.parallel(gulp.series(imaging, html), /* favIcons, */   videoBuild, css, javaScript, libs, fonts));
+const imaging = gulp.series(ignoredImages, sprite, sortingImages, /* retina,   webpBuild, */   images);
+const build = gulp.series(clean, gulp.parallel(gulp.series(imaging, html),  favIcons, videoBuild, css, javaScript, libs, fonts));
 const watch = gulp.parallel(watchFiles, serve);
 
 
@@ -390,7 +395,6 @@ exports.ignoredImages = ignoredImages;
 exports.woffConversion = woffConversion;
 exports.ttfConversion = ttfConversion;
 exports.sortingImages = sortingImages;
-exports.retina = retina;
 exports.cleanGit = cleanGit;
 exports.clean = clean;
 exports.css = css;
@@ -398,6 +402,7 @@ exports.images = images;
 exports.js = js;
 exports.favIcons = favIcons;
 exports.stylelint = stylelint;
+exports.retina = retina;
 exports.styles = styles;
 exports.javaScript = javaScript;
 exports.build = build;
