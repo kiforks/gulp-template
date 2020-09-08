@@ -122,7 +122,7 @@
     content: "";
     position: absolute;
     display: block;
-    @content
+    @content;
   }
 }
 
@@ -184,19 +184,23 @@
 
 @mixin before-after-hover {
   &:hover::before,
-  &:hover::after {
+  &:focus::before,
+  &:hover::after,
+  &:focus::after {
     @content;
   }
 }
 
 @mixin before-hover {
-  &:hover::before {
+  &:hover::before,
+  &:focus::before {
     @content;
   }
 }
 
 @mixin after-hover {
-  &:hover::after {
+  &:hover::after,
+  &:focus::before {
     @content;
   }
 }

@@ -1,13 +1,14 @@
 @import
 
 // Variables
-'variables/typography',
 'variables/media',
 'variables/decor',
+'variables/typography',
 
 // Mixins
 'mixins/font-face',
 'mixins/media',
+'mixins/breakpoints',
 'mixins/reset',
 'mixins/center',
 'mixins/pseudo',
@@ -27,7 +28,7 @@
 'blocks/global/clearfix',
 'blocks/global/container',
 'blocks/global/wrapper',
-'blocks/global/main-body',
+'blocks/global/body',
 
 // JS
 'js/aos',
