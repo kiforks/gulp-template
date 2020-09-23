@@ -29,7 +29,8 @@
 
 /*
   Example:
-  @include background-image('../img/background/image.jpg', '../img/background/image.webp');
+  @include background-image('../img/@1x/background/background-main@1x.jpg',
+                            '../img/@1x/background/background-main@1x.webp';
 */
 
 @mixin background-image($url, $webp1x: false) {

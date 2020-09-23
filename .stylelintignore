@@ -2,5 +2,8 @@ src/scss/style.scss
 src/scss/fonts.scss
 src/scss/mixins/**/*
 src/scss/variables/**/*
+src/scss/js/**/*
+src/scss/template.scss
+libs/**/*
 **/*.css
 

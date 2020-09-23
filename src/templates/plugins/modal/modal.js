@@ -53,7 +53,7 @@ function modalInit(object) {
       setTimeout(() => {
         currentModal.classList.remove(`modal--hide`);
         closing = false;
-      }, ANIMATION_SPEED)
+      }, ANIMATION_SPEED);
     }
   }
 
@@ -102,7 +102,7 @@ class Modal {
     this.content = options.content;
 
     return Object.assign(this, {
-      ...modalInit(this)
+      ...modalInit(this);
     });
   }
 }
