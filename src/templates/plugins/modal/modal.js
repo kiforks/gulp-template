@@ -101,10 +101,9 @@ class Modal {
     this.openingButton = options.openingButton ? options.openingButton : false;
     this.content = options.content;
 
-    return Object.assign(this, {
-      ...modalInit(this);
-    });
+    return Object.assign(this, modalInit(this));
   }
 }
+
 
 
