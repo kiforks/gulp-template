@@ -1,12 +1,13 @@
 try {
   const myObject = new ToggleClass({
     toggleItem: 'item',
-    toggleButton: 'button',
+    toggleButton: 'item',
   });
 } catch {
   function catchError() {
     return;
   }
 }
+
 
 

@@ -15,10 +15,21 @@ function toggleClass(options) {
   const removeClassFrom = (element, toggleClass = itemActiveClass) => element.classList.remove(toggleClass);
   const addClassTo = (element, toggleClass = itemActiveClass) => element.classList.add(toggleClass);
   const hasClassIn = (element, toggleClass = itemActiveClass) => element.classList.contains(toggleClass);
-  const forEachToggle = (callback, element = toggleItem,) => element.forEach(item => callback(item));
   const toggleTarget = options.target;
+  const targetDisable = options.targetDisable;
   const toggleBody = options.toggleBody;
   const preventDefault = options.preventDefault;
+  const transitionSwitch = (element, switchControl) => {
+    addClassTo(element, itemHideClass);
+
+    setTimeout(() => {
+      if(switchControl) {
+        switchControl = false;
+      }
+
+      removeClassFrom(element, itemHideClass);
+    }, ANIMATION_TIME);
+  };
 
 
   let closing = false;
@@ -36,13 +47,7 @@ function toggleClass(options) {
       }
 
       removeClassFrom(selector);
-      addClassTo(selector, itemHideClass);
-
-      setTimeout(() => {
-        closing = false;
-
-        removeClassFrom(selector, itemHideClass)
-      }, ANIMATION_TIME);
+      transitionSwitch(selector, closing);
     } else {
       if(!closing) {
         addClassTo(selector);
@@ -63,30 +68,30 @@ function toggleClass(options) {
       let target = event.target.closest(`.${itemClass}`);
 
       if(toggleTarget) {
-        if(hasClassIn(target)) {
-          return;
-        }
-
-        addClassTo(target, itemHideClass);
-
         toggleItem.forEach(item => {
-          removeClassFrom(item);
-
-          setTimeout(() => {
-            if(target !== item) {
-              removeClassFrom(item, itemHideClass)
+          if(hasClassIn(item)) {
+            if(item === target && !targetDisable) {
+              return;
             }
-          }, ANIMATION_TIME);
-        })
 
-        forEachToggle(removeClassFrom);
+            transitionSwitch(item);
+          }
 
-        toggleInit(target);
+          if(item !== target) {
+            removeClassFrom(item);
+          } else {
+            if(!targetDisable) {
+              addClassTo(item);
 
+              return;
+            }
+
+            item.classList.toggle(itemActiveClass);
+          }
+        });
       } else {
         toggleItem.forEach(item => toggleInit(item));
       }
-
     }
   })
 }
@@ -98,7 +103,8 @@ class ToggleClass {
     this.modifierItem = options.modifierItem ? `--${options.modifierItem}` : ''; // Target modifier
     this.modifierButton = options.modifierButton ? `--${options.modifierButton}` : '';  // Button modifier
     this.toggleBody = options.toggleBody ? options.toggleBody : false; // Toggle class on body, false
-    this.target = options.target ? options.target : false; // Toggle class on target, false
+    this.target = options.target ? options.target : false; // Makes only the target element active, false
+    this.targetDisable = options.targetDisable === false ? options.targetDisable : true; // Option to disable active class on target, true
     this.preventDefault = options.preventDefault ? options.preventDefault : true; // Prevent default, true
 
     return toggleClass(this);
